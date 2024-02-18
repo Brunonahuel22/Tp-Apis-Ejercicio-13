@@ -2,14 +2,14 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Clima from "./components/Clima.jsx";
-import './css/app.css'
+import "./css/app.css";
 
 import { useEffect, useState } from "react";
 
 function App() {
   const [precarga, SetPreCarga] = useState("");
   const [lugar, setLugar] = useState("florida");
-  const [datoClima, setDatoClima] = useState("");
+  const [datoClima, setDatoClima] = useState("[]");
 
   useEffect(() => {
     consultarApi();
@@ -30,7 +30,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLugar(precarga);
-    SetPreCarga('')
+    SetPreCarga("");
   };
 
   return (
@@ -50,10 +50,25 @@ function App() {
               onChange={handleChange}
               value={precarga}
             />
+             <Button variant="primary" type="submit" className="my-3">
+             Buscar <i class="bi bi-0-circle-fill"></i>
+      </Button>
           </Form.Group>
         </Form>
 
-        <Clima datosClima={datoClima} />
+        <Clima
+          temperatura={
+            datoClima.main ? Math.floor(datoClima.main.feels_like - 273.15) : ""
+          }
+          nombre={datoClima.name}
+          descripcion={
+            datoClima.weather ?  datoClima.weather[0].description : ""
+          }
+
+          imagenUrl={
+            datoClima.weather ? `https://openweathermap.org/img/wn/${datoClima.weather[0].icon}.png` : ""
+          }
+        />
       </Container>
     </div>
   );
